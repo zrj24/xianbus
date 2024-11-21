@@ -1,5 +1,0 @@
-[submodule "themes/blowfish"]
-	path = themes/blowfish
-	url = https://github.com/PKUZhiClass/blowfish.git
-	branch = main
-	shallow = true

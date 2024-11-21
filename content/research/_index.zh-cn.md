@@ -1,3 +1,0 @@
----
-cardView: false
----
