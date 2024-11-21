@@ -1,0 +1,65 @@
+{{ if .Params.isJoinUs }}
+
+    <!-- 调试信息，不显示 -->
+    {{/* 
+        <p>文件路径：{{ .File.Path }} </p>
+        {{ range .Pages }}
+        <p>Page: {{ .File.Path }}</p>
+        {{ end }}  
+        {{ range .Site.RegularPages }}
+            <p>Page path: {{ .File.Path }}</p>
+            <p>Page Section: {{ .Section }}</p>
+        {{ end }}  
+        {{ range .Sections }}
+        <p>Section: {{ .File.Path }}</p>
+        {{ end }}  
+    */}}
+
+  <!-- 显示 Blogs 部分 -->
+  <h3 class="mt-12 text-2xl font-bold text-neutral-700 dark:text-neutral-300">Blogs</h3>
+
+  <br>
+  
+  <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+    {{ $blogs := where .Site.RegularPages "Type" "==" "blog" }}
+    {{ if $blogs }}
+      {{ range $blogs }}
+        {{/*  <p>{{ .File.Path }}</p> <!-- 调试输出 -->  */}}
+        {{ partial "article-link/card.html" . }}
+      {{ end }}
+    {{ else }}
+      <p>No blogs available.</p>
+    {{ end }}
+  </section>
+
+  </section>
+
+  <!-- 显示 Past Speakers 部分 -->
+  <h3 class="mt-12 text-2xl font-bold text-neutral-700 dark:text-neutral-300">Past Speakers</h3>
+  <br>
+  <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+    {{ $speakers := where .Site.RegularPages "Type" "==" "speaker" }}
+    {{ if $speakers }}
+      {{ range $speakers }}
+        {{ partial "article-link/card.html" . }}
+      {{ end }}
+    {{ else }}
+      <p>No past speakers available.</p>
+    {{ end }}
+  </section>
+
+  <!-- 显示 Sponsors 部分 -->
+  <h3 class="mt-12 text-2xl font-bold text-neutral-700 dark:text-neutral-300">Sponsors</h3>
+  <br>
+  <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+    {{ $sponsors := where .Site.RegularPages "Type" "==" "sponsor" }}
+    {{ if $sponsors }}
+      {{ range $sponsors }}
+        {{ partial "article-link/card.html" . }}
+      {{ end }}
+    {{ else }}
+      <p>No sponsors available.</p>
+    {{ end }}
+  </section>
+
+{{ end }}
