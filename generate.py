@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import os
 
 font = FontProperties(fname="C:/Windows/Fonts/simhei.ttf", size=14)
+smallfont = FontProperties(fname="C:/Windows/Fonts/simhei.ttf", size=12)
 def readData():
     DATA_PATH = 'E:/real/data'
     filelist = os.listdir(DATA_PATH)
@@ -111,8 +112,8 @@ def analyze_change_bus():
         plt.show()
         plt.close()
 
-def readDayData(datestr):
-    datapath = 'E:/real/data/'
+def readDayData(datestr, lcsrc = 'E:/real/'):
+    datapath = f'{lcsrc}/data/'
     filelist = os.listdir(datapath)
     if datestr is None:
         datestr = datetime.now().strftime('%y%m%d')
@@ -149,9 +150,9 @@ def readDayData(datestr):
     dfall['bus'] = dfall['bus']
     return dfall
 
-def plotDayLine(lineName = None, df = None, datestr=None):
+def plotDayLine(lineName = None, df = None, datestr=None, lcsrc='E:/real/'):
     if df is None:
-        df = readDayData(datestr)
+        df = readDayData(datestr, lcsrc)
     assert df is not None, "df is None"
     df_line = df[df['line'] == lineName]
     max_anchor_1 = df_line[df_line['direction']==1]['anchor'].max()
@@ -160,6 +161,7 @@ def plotDayLine(lineName = None, df = None, datestr=None):
     times = df_line['time']
     size = 17
     alpha = 0.8
+    mpl.rcParams['figure.figsize'] = (6, 7)
     buses_1 = buses[(df_line['direction']==1) & (df_line['section']==0)]
     times_1 = times[(df_line['direction']==1) & (df_line['section']==0)]
     plt.scatter(buses_1, times_1, marker='o', c='#1f77b4', s=size, alpha=alpha)
@@ -172,8 +174,7 @@ def plotDayLine(lineName = None, df = None, datestr=None):
     buses_s_2 = buses[(df_line['direction']==2) & (df_line['section']==1)]
     times_s_2 = times[(df_line['direction']==2) & (df_line['section']==1)]
     plt.scatter(buses_s_2, times_s_2, marker='x', c='orange', s=size, alpha=alpha)
-    mpl.rcParams['figure.figsize'] = (6, 7)
-    plt.xticks(range(len(unique_a)), unique_a, rotation=90)
+    plt.xticks(range(len(unique_a)), unique_a, rotation=90, fontproperties=smallfont)
     plt.yticks(range(3,28))
     plt.ylim((6,24))
     font = FontProperties(fname="C:/Windows/Fonts/simhei.ttf", size=14)
@@ -183,14 +184,15 @@ def plotDayLine(lineName = None, df = None, datestr=None):
     return len(unique_a)
 
 
-def analyzeDayLine(datestr=None):
+def analyzeDayLine(datestr=None, lcsrc = 'E:/real/'):
     if datestr is None:
         datestr = datetime.now().strftime('%y%m%d')
-    df = readDayData(datestr)
-    linecode = pd.read_csv('E:/real/src/lineCodes.csv', header=None)
+    df = readDayData(datestr, lcsrc)
+    linecode = pd.read_csv(f'{lcsrc}/src/lineCodes.csv', header=None)
     lineNameList = linecode[0].to_list()
+    print('analyzing...')
     for lineName in lineNameList:
-        plotDayLine(lineName, df, datestr)
+        print(plotDayLine(lineName, df, datestr, lcsrc))
         plt.savefig(f"E:/xianbus/{datestr}/line/{lineName}.png")
         print(f'saved {lineName}')
         plt.close()
@@ -230,18 +232,17 @@ def generate_markdown_file():
     # datestr = '241121'
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(f'## [today]({datestr})\n')
-        file.write(f'<!--\n')
-        for i in range(len(lineNameList)):
-            line = lineNameList[i]
-            file.write(f"[{line}](line/{line}.png)\n")
+        # for i in range(len(lineNameList)):
+        #     line = lineNameList[i]
+        #     file.write(f"[{line}](line/{line}.png)\n")
     filename=f'E:/xianbus/{datestr}/index.md'
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(f'# xianbus today: {datestr}\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
-            file.write(f"[{line}]({datestr}/line/{line}.png)\n")
+            file.write(f"[{line}](line/{line}.png)\n\n")
 
 if __name__ == "__main__":
     # analyzeLine()
-    # analyzeDayLine()
-    generate_markdown_file()
+    analyzeDayLine(lcsrc='E:/real/6190/')
+    # generate_markdown_file()
