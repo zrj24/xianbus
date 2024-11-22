@@ -229,7 +229,8 @@ def generate_markdown_file():
     datestr = datetime.now().strftime('%y%m%d')
     # datestr = '241121'
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write(f'## [today](datestr)\n')
+        file.write(f'## [today]({datestr})\n')
+        file.write(f'<!--\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
             file.write(f"[{line}](line/{line}.png)\n")
@@ -242,5 +243,5 @@ def generate_markdown_file():
 
 if __name__ == "__main__":
     # analyzeLine()
-    analyzeDayLine()
+    # analyzeDayLine()
     generate_markdown_file()

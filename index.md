@@ -1,4 +1,4 @@
-## [today](datestr)
+## [today](241122)
 <!--
 [2路](line/2路.png)
 [4路](line/4路.png)
