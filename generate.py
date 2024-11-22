@@ -231,12 +231,12 @@ def generate_markdown_file():
     linecode = pd.read_csv(f'{SRC_PATH}/lineCodes_single.csv', header=None)
     lineNameList = lineNameList + linecode[0].to_list()
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write('# 随机数据，请勿相信！\n')
-        file.write(f'## [今日]({datestr})\n')
+        file.write('## 随机数据，请勿相信！\n')
+        file.write(f'## [查看今日]({datestr})\n')
     filename=f'E:/xianbus/{datestr}/index.md'
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write(f'# 西安|西咸: {datestr}\n')
-        file.write(f'## [咸阳](/xianyang)\n')
+        file.write(f'## 西安|西咸: {datestr}\n')
+        file.write(f'## [切换咸阳](xianyang)\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
             file.write(f"[{line}](line/{line}.png)\n\n")
@@ -245,7 +245,8 @@ def generate_markdown_file():
     lineNameList = linecode[0].to_list()
     filename=f'E:/xianbus/{datestr}/xianyang/index.md'
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write(f'# 咸阳: {datestr}\n')
+        file.write(f'## 咸阳: {datestr}\n')
+        file.write(f'## [切换西安|西咸](..)\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
             file.write(f"[{line}](line/{line}.png)\n\n")
