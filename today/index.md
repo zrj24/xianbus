@@ -1,7 +1,4 @@
-# xianbus today: 241121#
-
-## 
-
+# xianbus today: 241121
 ### [2路](line/241121/2路.png)
 ### [4路](line/241121/4路.png)
 ### [5路](line/241121/5路.png)

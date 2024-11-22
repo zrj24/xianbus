@@ -228,7 +228,6 @@ def generate_markdown_file():
     datestr = datetime.now().strftime('%y%m%d')
     # datestr = '241121'
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write('# xianbus')
         file.write('## [today](today)\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
@@ -237,9 +236,8 @@ def generate_markdown_file():
 
     filename='E:/xianbus/today/index.md'
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write(f'# xianbus today: {datestr}')
-        file.write('#\n\n')
-        file.write('## \n\n')
+        datestr = '241121'
+        file.write(f'# xianbus today: {datestr}\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
             linecode = lineCodeList[i]
