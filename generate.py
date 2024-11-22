@@ -172,7 +172,7 @@ def plotDayLine(lineName = None, df = None, datestr=None):
     buses_s_2 = buses[(df_line['direction']==2) & (df_line['section']==1)]
     times_s_2 = times[(df_line['direction']==2) & (df_line['section']==1)]
     plt.scatter(buses_s_2, times_s_2, marker='x', c='orange', s=size, alpha=alpha)
-    
+    mpl.rcParams['figure.figsize'] = (6, 7)
     plt.xticks(range(len(unique_a)), unique_a, rotation=90)
     plt.yticks(range(3,28))
     plt.ylim((6,24))
@@ -191,7 +191,7 @@ def analyzeDayLine(datestr=None):
     lineNameList = linecode[0].to_list()
     for lineName in lineNameList:
         plotDayLine(lineName, df, datestr)
-        plt.savefig(f"E:/xianbus/today/line/{datestr}/{lineName}.png")
+        plt.savefig(f"E:/xianbus/{datestr}/line/{lineName}.png")
         print(f'saved {lineName}')
         plt.close()
 
@@ -206,10 +206,9 @@ def plotDayBus(bus=None, df = None, datestr=None):
     df_bus['section'] = df_bus['section'].astype(str)
     df_bus['line'] = df_bus['line'] + df_bus['section'] + df_bus['direction']
     df_bus = df_bus.drop(['bus'], axis=1)
-    mpl.rcParams['figure.figsize'] = (6, 7)
     df_bus["a_numeric"], unique_a = pd.factorize(df_bus["line"], sort=True)
+    mpl.rcParams['figure.figsize'] = (6, 7)
     plt.scatter(df_bus["a_numeric"], df_bus["time"], s=size, alpha=alpha)
-    
     plt.xticks(range(len(unique_a)), unique_a, fontproperties=font)
     # y_ticks = list(range(0,25)) + ['1','2','3']
     plt.yticks(range(3,28))
@@ -220,30 +219,28 @@ def plotDayBus(bus=None, df = None, datestr=None):
 
 def generate_markdown_file():
     SRC_PATH = 'E:/real/src'
-    df, unique_d = readData()
     linecode = pd.read_csv(f'{SRC_PATH}/lineCodes.csv', header=None)
     lineNameList = linecode[0].to_list()
-    lineCodeList = linecode[1].to_list()
     filename='E:/xianbus/index.md'
+    SRC_PATH = 'E:/real/6190/src'
+    linecode = pd.read_csv(f'{SRC_PATH}/lineCodes.csv', header=None)
+    lineNameList = lineNameList + linecode[0].to_list()
+
     datestr = datetime.now().strftime('%y%m%d')
     # datestr = '241121'
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write('## [today](today)\n')
+        file.write(f'## [today](datestr)\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
-            linecode = lineCodeList[i]
-            file.write(f"### [{line}](line/{line}.png)\n")
-
-    filename='E:/xianbus/today/index.md'
+            file.write(f"[{line}](line/{line}.png)\n")
+    filename=f'E:/xianbus/{datestr}/index.md'
     with open(filename, 'w', encoding='utf-8') as file:
-        datestr = '241121'
         file.write(f'# xianbus today: {datestr}\n')
         for i in range(len(lineNameList)):
             line = lineNameList[i]
-            linecode = lineCodeList[i]
-            file.write(f"### [{line}](line/{datestr}/{line}.png)\n")
+            file.write(f"[{line}]({datestr}/line/{line}.png)\n")
 
 if __name__ == "__main__":
     # analyzeLine()
-    # analyzeDayLine()
+    analyzeDayLine()
     generate_markdown_file()
